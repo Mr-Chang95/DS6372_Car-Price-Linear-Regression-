@@ -1,6 +1,6 @@
 # DS6372 Project Car Price Prediction
 ## Daniel Chang, Vo Nguyen, & Akib Hossain
-
+![Blue Modern Tips Business Banner](https://user-images.githubusercontent.com/92649864/216754316-bcc16c84-55c2-43a9-8bef-fe8c76502f8d.jpg)
 
 ### Introduction
 In this project, we want to create a model that can best predict used car prices. Our team was tasked to identify any relationships between the selling prices and the other variables. Our variable selection methodologies includes, but not limited to, forward selection, backward selection, stepwise selection, etc. Since this is an observational study our conclusions are limited to the data included in our analysis. 
