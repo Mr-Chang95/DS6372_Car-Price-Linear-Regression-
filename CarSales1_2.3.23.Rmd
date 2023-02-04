@@ -9,28 +9,29 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-```{r cars}
+### Link to Presentation Video:
+
+
+```{r}
+#Needed Packages
 library(tidyverse)
 library(caret)
 library(naniar)
 library(stringr)
 
+#Load Data
 car_details = Car_details_v3
 
 ```
 
-## Exploratory Data Analysis
-
-Checking data programmatically:
-  Null data
-
+## Exploratory Data Analysis #1
+We first take a look at our dataset.
 ```{r null values, echo=FALSE}
-#head(car_details)
-#head(car_data)
-#head(dekho_details)
+
+head(car_details)
 dim(car_details)
 
+#Addressing Missing Data
 vis_miss(car_details)
 car_details = na.omit(car_details)
 head(car_details)
