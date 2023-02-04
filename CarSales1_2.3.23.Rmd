@@ -66,7 +66,9 @@ When do a fuel count, we find that petrol and diesel have the highest count. Aft
 
 When we create a histogram of mileage, we find that the distribution is normal. For our engine plot, we find that the engine around 1100 has the highest count. Next, we find that the distribution of kilometers driven is heavily right-skewed. When we look for the top 5 names/makes, we find that Swift Dzire VDI(highest count), Alto 800 LXI, Alto LXi, Swift VDI and X4 M Sport X have the highest count of all. 
 
-Creating a scatterplot with a logged selling price and max power, we find that there is a positive relationship between the two.  
+Creating a scatterplot with a logged selling price and max power, we find that there is a positive relationship between the two. When we take a look at our boxplot, we find that those with one owner commands the highest selling price with those cars that have been owned. However, if we factor in the test(no previous owners), that would be the highest.
+
+When we take a look at the different types of sellers, we find that there are dealers have the widest range and median out of all, but we see that for individual sellers there are quite a number of outliers. 
 
 ```{r visuals, echo=FALSE}
 ## Mean Selling Price Line Plot
@@ -145,6 +147,16 @@ ggplot(car_details, aes(x = max_power, y = log(selling_price))) +
   ggtitle("log Selling Price vs. Max Power") +
   xlab("Max Power") +
   ylab("log Selling Price")
+
+## Boxplot of prices by owner
+ggplot(car_details, aes(x = owner, y = selling_price, group = owner)) +
+  geom_boxplot() +
+  ggtitle("Selling Price By Owners")
+
+## Boxplot of prices by Seller Type
+ggplot(car_details, aes(x = seller_type, y = selling_price, group = seller_type)) +
+  geom_boxplot() +
+  ggtitle("Selling Price By Seller Type")
 ```
 
 ```{r visuals, echo=FALSE}
