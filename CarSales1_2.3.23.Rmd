@@ -160,7 +160,7 @@ par(mfrow=c(2,2))
 plot(model5)
 par(mfrow=c(1,1))
 
-#Tradional MLR Model 4 with Log Transformation & Interactions
+#Traditional MLR Model 4 with Log Transformation & Interactions
 model4 = lm(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,data=car_details)
 summary(model4)
 
