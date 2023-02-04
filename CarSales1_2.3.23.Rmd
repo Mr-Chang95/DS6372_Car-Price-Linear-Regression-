@@ -18,7 +18,8 @@ library(tidyverse)
 library(caret)
 library(naniar)
 library(stringr)
-
+library(ggplot2)
+library(dplyr)
 #Load Data
 car_details = read.csv("Car details v3.csv", header = T, stringsAsFactors = T)
 
@@ -70,7 +71,7 @@ Creating a scatterplot with a logged selling price and max power, we find that t
 
 When we take a look at the different types of sellers, we find that there are dealers have the widest range and median out of all, but we see that for individual sellers there are quite a number of outliers. 
 
-```{r visuals, echo=FALSE}
+```{r, echo=FALSE}
 ## Mean Selling Price Line Plot
 mean_price = car_details %>%
   select(year, selling_price) %>%
@@ -273,7 +274,7 @@ par(mfrow=c(1,1))
 ## Check for Multicollinearity 
 ```{r}
 library(car)
-vif(model4)
+vif(model3)
 ```
 
 ### Model 3: Analysis and CV 
