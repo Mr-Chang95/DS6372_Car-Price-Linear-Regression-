@@ -158,7 +158,7 @@ ggplot(car_details, aes(x = seller_type, y = selling_price, group = seller_type)
   geom_boxplot() +
   ggtitle("Selling Price By Seller Type")
 ```
-
+# Objective 1
 ```{r visuals, echo=FALSE}
 #Tradional MLR Model 1
 model1 = lm(selling_price~year + km_driven + fuel+ seller_type + transmission + owner + mileage + engine + max_power + seats + brand,data=car_details)
@@ -177,37 +177,12 @@ par(mfrow=c(2,2))
 plot(model2)
 par(mfrow=c(1,1))
 
-
-#Tradional MLR Model 3 with Log Transformation & Interactions
-model3 = lm(log(selling_price)~(year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand)^2,data=car_details)
-summary(model3)
-
-par(mfrow=c(2,2))
-plot(model3)
-par(mfrow=c(1,1))
-
-model5 = lm(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,data=car_details)
-summary(model5)
-
-par(mfrow=c(2,2))
-plot(model5)
-par(mfrow=c(1,1))
-
-#Tradional MLR Model 4 with Log Transformation & Interactions
-model4 = lm(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,data=car_details)
-summary(model4)
-
-par(mfrow=c(2,2))
-plot(model4)
-par(mfrow=c(1,1))
-
-
 ```
 
 ```{r}
 #Check for Multicollinearity
 library(car)
-vif(model4)
+vif(model2)
 ```
 
 ```{r}
@@ -264,6 +239,7 @@ ols_step_both_p(model4,prem = .05,details=TRUE)
 
 
 ```
+
 # Objective 2: Complex Models
 
 Problem Statement: We are through a process of comparing multiple models using K-fold Cross Validation to test our model against each other for that can predict best for future data. We will have model 3, which will focus on logging the y and x variables as a Log-Log model. Model 4 will have a Log-Log transformation, but will also include more complexities in interactions.
