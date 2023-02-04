@@ -20,12 +20,15 @@ library(naniar)
 library(stringr)
 
 #Load Data
-car_details = Car_details_v3
+car_details = read.csv("Car details v3.csv", header = T, stringsAsFactors = T)
 
 ```
 
-## Exploratory Data Analysis #1
-We first take a look at our dataset.
+## Exploratory Data Analysis 1
+### Viewing Dataset
+We first take a look at our dataset. There are a total 221 nulls in current dataset that we are going to omit. There are a total of 8128 rows and 13 columns. 
+
+During our data wrangling process, we are going to be seperating the `name` column to create a `brand` column. We will also clean up the `engine`, `max_power`, and `mileage` columns to extract the numbers and make the them numeric variables. Lastly, we only want the first word in the `owner` column.
 ```{r null values, echo=FALSE}
 
 head(car_details)
@@ -33,6 +36,7 @@ dim(car_details)
 
 #Addressing Missing Data
 vis_miss(car_details)
+sum(is.na(car_details))
 car_details = na.omit(car_details)
 head(car_details)
 
@@ -54,6 +58,16 @@ car_details$owner <- word(car_details$owner, 1)
 
 ```
 
+### Visualizations
+
+Looking through our visualizations, we find that our mean selling price increases year after year and our graph seems to resemble an exponential curve, if we do not take into account our last year(2020). This can also be seen in our boxplot where the median price per year gets higher and higher. There are many outliers every year as well.
+
+When do a fuel count, we find that petrol and diesel have the highest count. After that we want to do a brand count, Maruti, Hyuandai, Mahindra, Tata and Honda are the brands that appear the most. 
+
+When we create a histogram of mileage, we find that the distribution is normal. For our engine plot, we find that the engine around 1100 has the highest count. Next, we find that the distribution of kilometers driven is heavily right-skewed. When we look for the top 5 names/makes, we find that Swift Dzire VDI(highest count), Alto 800 LXI, Alto LXi, Swift VDI and X4 M Sport X have the highest count of all. 
+
+Creating a scatterplot with a logged selling price and max power, we find that there is a positive relationship between the two.  
+
 ```{r visuals, echo=FALSE}
 ## Mean Selling Price Line Plot
 mean_price = car_details %>%
@@ -64,6 +78,10 @@ mean_price = car_details %>%
 ggplot(mean_price, aes(x = year, y = mean_price)) +
   geom_line() +
   ggtitle("Mean Selling Price By Year")
+
+## Boxplot of prices by year
+ggplot(car_details, aes(x = year, y = selling_price, group = year)) +
+  geom_boxplot()
 
 ## Fuel Count
 fuel_count = car_details %>%
@@ -80,14 +98,17 @@ ggplot(fuel_count, aes(x = fuel, y = n)) +
 brand_count = car_details %>%
   group_by(brand) %>%
   summarise(n = n()) %>%
-  arrange(desc(n))
+  arrange(desc(n)) %>%
+  head(10)
 
-ggplot(brand_count, aes(x = brand, y = n)) +
+ggplot(brand_count, aes(x = reorder(brand,-n, decreasing = T), 
+                        y = n)) +
   geom_bar(stat='identity') +
   ggtitle("Brand Count") + 
   coord_flip() +
   ylab("Brand Count") + 
-  xlab("Brand")
+  xlab("Brand") +
+  ggtitle("Top 10 Brand Count")
 
 ## Histogram of Mileage
 ggplot(car_details, aes(x = mileage)) +
@@ -101,7 +122,7 @@ ggplot(car_details, aes(x = engine)) +
 
 ## Histogram of km_driven
 ggplot(car_details, aes(x = km_driven)) +
-  geom_histogram(bins = 10) +
+  geom_histogram(bins = 150) +
   ggtitle("Histogram of Kilometers Driven")
 
 ## Popular Names
@@ -113,17 +134,17 @@ pop_name = car_details %>%
 
 ggplot(pop_name, aes(x = name, y = n)) +
   geom_bar(stat='identity') +
-  ggtitle("Name Count") + 
+  ggtitle("Top 5 Name Count") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   ylab("Name Count") + 
   xlab("Name")
 
 ## Selling Price vs Max Power
-ggplot(car_details, aes(x = max_power, y = selling_price)) +
+ggplot(car_details, aes(x = max_power, y = log(selling_price))) +
   geom_point() +
-  ggtitle("Selling Price vs. Max Power") +
+  ggtitle("log Selling Price vs. Max Power") +
   xlab("Max Power") +
-  ylab("Selling Price")
+  ylab("log Selling Price")
 ```
 
 ```{r visuals, echo=FALSE}
