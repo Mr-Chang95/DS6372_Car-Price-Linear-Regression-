@@ -313,7 +313,7 @@ opt.pen<-model3.fit2$finalModel   #penalty term
 coef(model3.fit4$finalModel)
 
 
-summary(lm(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand, data= car_details))
+
 
 
 #K Fold CV for Knn
@@ -363,7 +363,7 @@ coef(model3.fit$finalModel,opt.pen)
 
 
 #Lasso
-model4.fit2 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand, data= car_details,
+model4.fit2 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type, data= car_details,
                   method="glmnet",
                   trControl=fitControl,
                   tuneGrid=expand.grid(data.frame(alpha=1,lambda=seq(0,.0001,.001245231)))
@@ -377,7 +377,7 @@ opt.pen<-model3.fit2$finalModel$lambdaOpt   #penalty term
 coef(model3.fit2$finalModel,opt.pen)
 
 # Ridge
-model4.fit3 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand, data= car_details,
+model4.fit3 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type, data= car_details,
                   method="glmnet",
                   trControl=fitControl,
                   tuneGrid=expand.grid(data.frame(alpha=0,lambda=seq(0,.0001,0.001225234)))
@@ -385,28 +385,24 @@ model4.fit3 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type
 
 
 model4.fit3
-plot(model3.fit3)
+plot(model4.fit3)
 
 opt.pen<-model4.fit3$finalModel$lambdaOpt   #penalty term
 coef(model4.fit3$finalModel,opt.pen)
 
 #Linear Regression
-model3.fit4 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand, data= car_details,
+model4.fit4 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type, data= car_details,
                   method="lm",
                   trControl=fitControl,
                 
 )
 
 
-model3.fit4
-plot(model3.fit4)
+model4.fit4
+plot(model4.fit4)
 
 opt.pen<-model3.fit2$finalModel   #penalty term
 coef(model3.fit4$finalModel)
-
-
-summary(lm(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand, data= car_details))
-
 
 
 
@@ -416,23 +412,23 @@ summary(lm(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transm
 fitControl<-trainControl(method="repeatedcv",number=10,repeats=1) 
 
 #training the model via 10fold cv
-knn.fit<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,
+knn4.fit<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,
                   data=car_details,
                   method="knn",
                   trControl=fitControl
 )
 
-plot(knn.fit)
-knn.fit
+plot(knn4.fit)
+knn4.fit
 
 #training the model via 10fold cv
-knn.fit2<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,
+knn4.fit2<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,
                   data=car_details,
                   method="knn",
                   trControl=fitControl,
                tuneGrid=expand.grid(k=c(5:9))
 )
 
-plot(knn.fit2)
-knn.fit2
+plot(knn4.fit2)
+knn4.fit2
 ```
