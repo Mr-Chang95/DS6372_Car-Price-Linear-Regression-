@@ -363,16 +363,6 @@ knn3.fit1<-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type + 
 plot(knn3.fit1)
 knn3.fit1
 
-#training the model via 10fold cv
-knn3.fit2<-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,
-                  data=car_details,
-                  method="knn",
-                  trControl=fitControl,
-               tuneGrid=expand.grid(k=c(5:9))
-)
-
-plot(knn3.fit2)
-knn3.fit2
 ```
 ### Model 4: Analysis and CV 
 We are performing a 10-fold Cross Validation on Model 4: Log-Log with Interactions.
@@ -453,14 +443,4 @@ knn4.fit<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seat
 plot(knn4.fit)
 knn4.fit
 
-#training the model via 10fold cv
-knn4.fit2<-train(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,
-                  data=car_details,
-                  method="knn",
-                  trControl=fitControl,
-               tuneGrid=expand.grid(k=c(5:9))
-)
-
-plot(knn4.fit2)
-knn4.fit2
 ```
