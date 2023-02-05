@@ -257,9 +257,12 @@ lines(1:20,sqrt(trainMSE),lty=3,col="blue")
 #OLSRR 
 set.seed(1234)
 library(olsrr)
-ols_step_forward_p(model4,prem = .05,details=TRUE)
-ols_step_backward_p(model4,prem = .05,details=TRUE)
-ols_step_both_p(model4,prem = .05,details=TRUE)
+forward = ols_step_forward_p(model2,prem = .05,details=TRUE)
+backward = ols_step_backward_p(model2,prem = .05,details=TRUE)
+ols_step_both_aic(model2,prem=0.05,details=TRUE)
+stepwise = ols_step_both_p(model2,prem=0.05,details=TRUE)
+
+
 
 
 ```
@@ -282,6 +285,10 @@ summary(model3)
 par(mfrow=c(2,2))
 plot(model3)
 par(mfrow=c(1,1))
+
+#Full Interaction
+Interactionmodel = lm(log(selling_price)~(year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand)^2,data=car_details)
+summary(Interactionmodel)
 
 #Model 4: Log-Log Transformation with Interactions
 model4 = lm(log(selling_price)~seller_type + owner + log(max_power)+log(seats)+year:log(km_driven)+year:seller_type+year:owner+year:log(max_power)+year:log(seats)+log(km_driven):log(engine)+log(km_driven):log(max_power)+log(km_driven):log(seats)+fuel:seller_type,data=car_details)
