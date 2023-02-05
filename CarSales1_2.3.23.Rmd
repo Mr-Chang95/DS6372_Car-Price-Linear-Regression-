@@ -183,7 +183,12 @@ geom_text(aes(Var2, Var1, label = value),
           color = "white", size = 4) +
   ggtitle("Heatmap of Correalation For Numeric Variables")
 ```
-# Objective 1
+## Objective 1
+Problem Statement: We are through a process of comparing multiple models using linear regressio. One model does not consists of any logged variables and the other model, we log the response variable. The goal is to see if altering the variable is necessary or produce a better model and address the assumptions correctly. 
+
+Model 1: No Transformation : We will not log anything in this model and see if it meets the necessary assumptions.
+
+Model 2: Log-Linear Transformation with Interactions: We log the response variable(selling price) to see if the assumptions have been met. If the assumptions are met, we will use this model as our base which we will improve on.
 ```{r visuals, echo=FALSE}
 #Tradional MLR Model 1
 model1 = lm(selling_price~year + km_driven + fuel+ seller_type + transmission + owner + mileage + engine + max_power + seats + brand,data=car_details)
@@ -211,9 +216,23 @@ vif(model2)
 ```
 
 ```{r}
+#OLSRR 
+set.seed(1234)
+library(olsrr)
+forward = ols_step_forward_p(model2,prem = .05,details=TRUE)
+backward = ols_step_backward_p(model2,prem = .05,details=TRUE)
+stepwise = ols_step_both_p(model2,prem=0.05,details=TRUE)
+
+forwardstepwisemodel = lm(log(selling_price)~year+transmission+engine+max_power+brand+fuel,data=car_details)
+backwardsmodel = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=car_details)
+
+```
+
+```{r}
 set.seed(1236)
 library(leaps)
 
+#We are now trainning and testing our forward selection model and backwards model.
 trainIndex<-createDataPartition(car_details$selling_price,p=.8,list=F)  #p: proportion of data in train
 
 training<-car_details[trainIndex,]
@@ -252,7 +271,7 @@ trainMSE<-summary(reg.fwd)$rss/nrow(training)
 lines(1:20,sqrt(trainMSE),lty=3,col="blue")  
 
 ForwardRSME = sqrt(valMSE[index])
-
+ForwardRSME
 
 for (i in 1:10){
   predictions<-predict.regsubsets(object=reg.bwd,newdata=validate,id=i) 
@@ -268,19 +287,18 @@ lines(1:20,sqrt(trainMSE),lty=3,col="blue")
 
 BackwardRSME = sqrt(valMSE[index1])
 BackwardRSME
-```
 
-```{r}
-#OLSRR 
-set.seed(1234)
-library(olsrr)
-forward = ols_step_forward_p(model2,prem = .05,details=TRUE)
-backward = ols_step_backward_p(model2,prem = .05,details=TRUE)
-stepwise = ols_step_both_p(model2,prem=0.05,details=TRUE)
+#Adjusted R-Squared for Forward
+max(forward$adjr)
 
-forwardstepwisemodel = lm(log(selling_price)~year+transmission+engine+max_power+brand+fuel,data=car_details)
-backwardsmodel = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=car_details)
+#Adjusted R-squared for Backwards
+max(backward$adjr)
 
+forwardstepwisemodeltest = lm(log(selling_price)~year+transmission+engine+max_power+brand+fuel,data=validate)
+summary(forwardstepwisemodeltest)
+
+backwardsmodel = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=validate)
+summary(backwardsmodel)
 
 ```
 
