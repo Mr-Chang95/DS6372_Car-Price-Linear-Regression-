@@ -251,6 +251,23 @@ points(index,sqrt(valMSE[index]),col="red",pch=10)
 trainMSE<-summary(reg.fwd)$rss/nrow(training)
 lines(1:20,sqrt(trainMSE),lty=3,col="blue")  
 
+ForwardRSME = sqrt(valMSE[index])
+
+
+for (i in 1:10){
+  predictions<-predict.regsubsets(object=reg.bwd,newdata=validate,id=i) 
+  valMSE[i]<-mean((log(validate$selling_price)-predictions)^2)
+}
+par(mfrow=c(1,1))
+plot(1:10,sqrt(valMSE),type="l",xlab="# of predictors",ylab="test vs train RMSE",ylim=c(0.2381315,0.5360795))
+index1<-which(valMSE==min(valMSE))
+points(index1,sqrt(valMSE[index]),col="red",pch=10)
+
+trainMSE<-summary(reg.bwd)$rss/nrow(training)
+lines(1:20,sqrt(trainMSE),lty=3,col="blue")  
+
+BackwardRSME = sqrt(valMSE[index1])
+BackwardRSME
 ```
 
 ```{r}
@@ -259,10 +276,10 @@ set.seed(1234)
 library(olsrr)
 forward = ols_step_forward_p(model2,prem = .05,details=TRUE)
 backward = ols_step_backward_p(model2,prem = .05,details=TRUE)
-ols_step_both_aic(model2,prem=0.05,details=TRUE)
 stepwise = ols_step_both_p(model2,prem=0.05,details=TRUE)
 
-
+forwardstepwisemodel = lm(log(selling_price)~year+transmission+engine+max_power+brand+fuel,data=car_details)
+backwardsmodel = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=car_details)
 
 
 ```
