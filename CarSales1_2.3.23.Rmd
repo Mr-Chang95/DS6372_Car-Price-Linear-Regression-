@@ -187,6 +187,7 @@ vif(model2)
 ```
 
 ```{r}
+set.seed(1236)
 library(leaps)
 
 trainIndex<-createDataPartition(car_details$selling_price,p=.8,list=F)  #p: proportion of data in train
@@ -195,7 +196,7 @@ training<-car_details[trainIndex,]
 validate<-car_details[-trainIndex,]
 
 
-reg.fwd=regsubsets(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,data=car_details,method="forward",nvmax=30)
+reg.fwd=regsubsets(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,data=car_details,method="forward",nvmax=20)
 coef(reg.fwd,10)
 
 reg.bwd=regsubsets(log(selling_price)~year + log(km_driven) + fuel+ seller_type + transmission + owner + mileage + log(engine) + log(max_power) + log(seats) + brand,data=car_details,method="backward",nvmax=20)
@@ -214,12 +215,12 @@ predict.regsubsets =function (object , newdata ,id ,...){
 
 valMSE<-c()
 #note my index, i, is to 20 since that is how many predictors I went up to during fwd selection
-for (i in 1:20){
+for (i in 1:10){
   predictions<-predict.regsubsets(object=reg.fwd,newdata=validate,id=i) 
   valMSE[i]<-mean((log(validate$selling_price)-predictions)^2)
 }
 par(mfrow=c(1,1))
-plot(1:20,sqrt(valMSE),type="l",xlab="# of predictors",ylab="test vs train RMSE",ylim=c(0.3,.9))
+plot(1:10,sqrt(valMSE),type="l",xlab="# of predictors",ylab="test vs train RMSE",ylim=c(0.2381315,0.5360795))
 index<-which(valMSE==min(valMSE))
 points(index,sqrt(valMSE[index]),col="red",pch=10)
 
@@ -232,8 +233,6 @@ lines(1:20,sqrt(trainMSE),lty=3,col="blue")
 #OLSRR 
 set.seed(1234)
 library(olsrr)
-
-
 ols_step_forward_p(model4,prem = .05,details=TRUE)
 ols_step_backward_p(model4,prem = .05,details=TRUE)
 ols_step_both_p(model4,prem = .05,details=TRUE)
@@ -312,7 +311,6 @@ model3.fit2 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type
 
 
 model3.fit2
-plot(model3.fit2)
 
 opt.pen<-model3.fit2$finalModel$lambdaOpt   #penalty term
 coef(model3.fit2$finalModel,opt.pen)
@@ -326,7 +324,7 @@ model3.fit3 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type
 
 
 model3.fit3
-plot(model3.fit3)
+
 
 opt.pen<-model3.fit3$finalModel$lambdaOpt   #penalty term
 coef(model3.fit3$finalModel,opt.pen)
@@ -340,7 +338,6 @@ model3.fit4 <-train(log(selling_price)~year + log(km_driven) + fuel+ seller_type
 
 
 model3.fit4
-plot(model3.fit4)
 
 opt.pen<-model3.fit2$finalModel   #penalty term
 coef(model3.fit4$finalModel)
@@ -394,7 +391,6 @@ model4.fit2 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(
 
 
 model4.fit2
-plot(model4.fit2)
 
 opt.pen<-model3.fit2$finalModel$lambdaOpt   #penalty term
 coef(model3.fit2$finalModel,opt.pen)
@@ -408,7 +404,6 @@ model4.fit3 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(
 
 
 model4.fit3
-plot(model4.fit3)
 
 opt.pen<-model4.fit3$finalModel$lambdaOpt   #penalty term
 coef(model4.fit3$finalModel,opt.pen)
@@ -422,7 +417,6 @@ model4.fit4 <-train(log(selling_price)~seller_type + owner + log(max_power)+log(
 
 
 model4.fit4
-plot(model4.fit4)
 
 opt.pen<-model3.fit2$finalModel   #penalty term
 coef(model3.fit4$finalModel)
