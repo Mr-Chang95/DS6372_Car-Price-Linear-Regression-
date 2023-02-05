@@ -31,7 +31,6 @@ We first take a look at our dataset. There are a total 221 nulls in current data
 
 During our data wrangling process, we are going to be seperating the `name` column to create a `brand` column. We will also clean up the `engine`, `max_power`, and `mileage` columns to extract the numbers and make the them numeric variables. Lastly, we only want the first word in the `owner` column.
 ```{r null values, echo=FALSE}
-
 head(car_details)
 dim(car_details)
 
@@ -59,6 +58,10 @@ car_details$owner <- word(car_details$owner, 1)
 
 ```
 
+```{r null values, echo=FALSE}
+car_details = na.omit(car_details)
+sum(is.na(car_details))
+```
 ### Visualizations
 
 Looking through our visualizations, we find that our mean selling price increases year after year and our graph seems to resemble an exponential curve, if we do not take into account our last year(2020). This can also be seen in our boxplot where the median price per year gets higher and higher. There are many outliers every year as well.
