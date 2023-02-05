@@ -16,3 +16,4 @@ Our data is collected from [Kaggle.com](https://www.kaggle.com/code/eisgandar/ca
 > Model Selection(Lasso, Ridge, KNN)
 
 ### Video Presentation Link
+[Youtube Video Link](https://www.youtube.com/watch?v=KSOq29tFUoQ&ab_channel=DannyChang)
