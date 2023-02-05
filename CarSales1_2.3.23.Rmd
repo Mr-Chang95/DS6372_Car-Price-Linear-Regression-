@@ -20,6 +20,7 @@ library(naniar)
 library(stringr)
 library(ggplot2)
 library(dplyr)
+library(reshape2)
 #Load Data
 car_details = read.csv("Car details v3.csv", header = T, stringsAsFactors = T)
 
@@ -73,6 +74,8 @@ When we create a histogram of mileage, we find that the distribution is normal. 
 Creating a scatterplot with a logged selling price and max power, we find that there is a positive relationship between the two. When we take a look at our boxplot, we find that those with one owner commands the highest selling price with those cars that have been owned. However, if we factor in the test(no previous owners), that would be the highest.
 
 When we take a look at the different types of sellers, we find that there are dealers have the widest range and median out of all, but we see that for individual sellers there are quite a number of outliers. 
+
+When looking at the correlation map for the numeric variables, we find that max power, year and engine are strongly or moderately correlated(positive) with selling price.
 
 ```{r, echo=FALSE}
 ## Mean Selling Price Line Plot
@@ -161,6 +164,24 @@ ggplot(car_details, aes(x = owner, y = selling_price, group = owner)) +
 ggplot(car_details, aes(x = seller_type, y = selling_price, group = seller_type)) +
   geom_boxplot() +
   ggtitle("Selling Price By Seller Type")
+
+## Correlation map
+num_cols = unlist(lapply(car_details, is.numeric))
+data_num = car_details[ , num_cols] 
+
+corr_mat <- round(cor(data_num),2)
+ 
+# reduce the size of correlation matrix
+melted_corr_mat <- melt(corr_mat)
+# head(melted_corr_mat)
+ 
+# plotting the correlation heatmap
+ggplot(data = melted_corr_mat, aes(x=Var1, y=Var2,
+                                   fill=value)) +
+geom_tile() +
+geom_text(aes(Var2, Var1, label = value),
+          color = "white", size = 4) +
+  ggtitle("Heatmap of Correalation For Numeric Variables")
 ```
 # Objective 1
 ```{r visuals, echo=FALSE}
