@@ -9,3 +9,10 @@ In this project, we want to create a model that can best predict used car prices
 Our data is collected from [Kaggle.com](https://www.kaggle.com/code/eisgandar/car-prices-predict-with-ensemble-methods/notebook). There are a total of 8,128 rows and 13 columns with a mixture of numeric and categorical variables. The data is collected from 1994-2020. 
 
 ### Objectives
+- Objective 1: Regression with No transformation and Log-Linear
+> Assumptions, Variables Selections, Summary Statistics, Hypothesis Test, Interpretations 
+
+- Objective 2: Log-log transformations
+> Model Selection(Lasso, Ridge, KNN)
+
+### Video Presentation Link
