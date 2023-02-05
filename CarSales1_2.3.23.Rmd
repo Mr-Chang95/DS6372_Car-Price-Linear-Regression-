@@ -59,7 +59,7 @@ car_details$owner <- word(car_details$owner, 1)
 
 ```
 
-```{r null values, echo=FALSE}
+```{r null values2, echo=FALSE}
 car_details = na.omit(car_details)
 sum(is.na(car_details))
 ```
