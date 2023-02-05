@@ -300,6 +300,21 @@ summary(forwardstepwisemodeltest)
 backwardsmodel = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=validate)
 summary(backwardsmodel)
 
+
+backwardsmodeltest = lm(log(selling_price)~year + km_driven + fuel+ seller_type + transmission + owner + engine + max_power + seats +brand,data=training)
+summary(backwardsmodeltest)
+
+ols_plot_resid_fit(backwardsmodel)
+ols_plot_resid_lev(backwardsmodel)
+ols_plot_resid_qq(backwardsmodel)
+ols_plot_resid_hist(backwardsmodel)
+
+ols_plot_resid_fit(backwardsmodeltest)
+ols_plot_resid_lev(backwardsmodeltest)
+ols_plot_resid_qq(backwardsmodeltest)
+ols_plot_resid_hist(backwardsmodeltest)
+
+
 ```
 
 # Objective 2: Complex Models
